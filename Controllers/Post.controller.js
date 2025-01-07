@@ -43,8 +43,16 @@ export const  updatePost =async(req,res)=>{
 export const fetchPosts =async(req,res)=>{
     const Posts =await prisma.post.findMany({
         include:{
-            post :true,
-        }
+            comment :{
+                include :{
+                    user:{
+                        select:{
+                            name :true,
+                        }
+                    }
+                }
+            }
+          }
     }) //return in array all data
     // meant this function findMany return array
 

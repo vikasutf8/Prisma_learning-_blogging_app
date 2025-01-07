@@ -4,6 +4,18 @@ import prisma from '../DB/dbConfig.js'
 export const createComment =async(req,res)=>{
     const {user_id,post_id,comment } =req.body;
 
+    await prisma.post.update({
+        where:{
+            id :Number(post_id)
+        },
+        data:{
+            comment_count:{
+                increment :1
+            }
+        }
+
+    })
+
     const newComment =await prisma.comment.create({
         data:{
             user_id :Number(user_id) ,// also given hashed password
@@ -71,6 +83,19 @@ export const showComments =async(req,res)=>{
 
 export const deleteComment =async(req,res)=>{
     const ComnetId =req.params.id;
+
+    await prisma.post.update({
+        where:{
+            id :Number(post_id)
+        },
+        data:{
+            comment_count:{
+                decrement :1
+            }
+        }
+
+    })
+
     const comment =await prisma.comment.delete({
         where:{
             id :Number(ComnetId)
