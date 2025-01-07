@@ -20,4 +20,28 @@ model User{
   email String @unique
   password String? // authenctication method uses
   created_at DateTime @default(now())
+  comment Comment[]
+  post Post[] 
+  // why i takes its array as simple i user can create many post/question etc ... 1 to n relationship
+}
+
+model Post{
+  id Int @id  @default(autoincrement())
+  user User @relation(fields: [user_id],references: [id], onDelete:Cascade ) //fild is crrent table ka relation and reference is outer table
+  user_id Int 
+  title String
+  description String?
+  comment_count Int @default(0)
+  created_at DateTime @default(now())
+  comment Comment[] // single video/question par multiple comment hote ha
+}
+
+model Comment {
+  id String @id @default(uuid()) //32-bit log
+  post Post @relation(fields: [post_id],references: [id], onDelete: Cascade)
+  post_id Int
+  user User @relation(fields :[user_id] ,references: [id], onDelete: Cascade)
+  user_id Int
+  comment String
+  created_at DateTime @default(now())
 }
